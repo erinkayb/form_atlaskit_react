@@ -13,8 +13,7 @@ export default class MyForm extends Component {
     }
   }
   handleSubmit() {
-    this.setState({email: this.props.email})
-    console.log(this.props.email.value)
+  console.log(this.email)
     axios
       .post("https://minderenvoorkinderen.decoco.nl/api/users", {
         client_id: 1,
@@ -33,14 +32,14 @@ export default class MyForm extends Component {
   render() {
     return <div style={{ display: "flex", width: "400px", margin: "50px auto", flexDirection: "column" }}>
       <Form onSubmit={this.handleSubmit.bind(this)}>
-        {({ formProps }) => <form {...formProps} >
+        {({ formProps } ) => <form {...formProps} >
           <Field
             name="email"
             label="Email"
             isRequired>
-            {({ fieldProps }) => <TextField type="email" name="email"
+            {({ fieldProps: { email } }) => <TextField type="email" name="email"
               label="Email"
-              refs='email' {...fieldProps} />}
+              refs='email' email={email} />}
           </Field>
           <Field
             name="password"
