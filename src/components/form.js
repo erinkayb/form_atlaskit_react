@@ -20,12 +20,12 @@ export default class MyForm extends Component {
         this.setState({email: data.email, password: data.password})
         return new Promise(resolve => setTimeout(resolve, 2000)).then(() =>
           axios
-            .post("https://minderenvoorkinderen.decoco.nl/api/users", {
+            .post("https://minderenvoorkinderen.decoco.nl/api/users", JSON.stringify({
               client_id: 1,
               client_secret: "5C6r0KLA4RIhVFQSOf75GcZzDzJ1pZCOg46gEhKI",
               email: this.state.email,
               password: this.state.password,
-            })
+            }))
             .then(response => {
               console.log(response)
             })
@@ -37,7 +37,7 @@ export default class MyForm extends Component {
         {({ formProps } ) => <form {...formProps} >
           <Field
             name="email"
-            label="email"
+            label="Email"
             defaultValue=""
             isRequired>
             {({ fieldProps }) => <TextField type='email' ref='email' {...fieldProps} />}
