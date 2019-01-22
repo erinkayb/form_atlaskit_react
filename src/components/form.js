@@ -12,41 +12,42 @@ export default class MyForm extends Component {
       password: ''
     }
   }
-  handleSubmit() {
-  console.log(this.email)
-    axios
-      .post("https://minderenvoorkinderen.decoco.nl/api/users", {
-        client_id: 1,
-        client_secret: "5C6r0KLA4RIhVFQSOf75GcZzDzJ1pZCOg46gEhKI",
-        email: this.state.email,
-        password: this.state.password,
-      })
-      .then(response => {
-        console.log(response)
-      })
-      .catch(error => {
-        console.log(error.response)
-      })
-  }
 
   render() {
     return <div style={{ display: "flex", width: "400px", margin: "50px auto", flexDirection: "column" }}>
-      <Form onSubmit={this.handleSubmit.bind(this)}>
+      <Form onSubmit={data => {
+        console.log('form data', data);
+        this.setState({email: data.email, password: data.password})
+        return new Promise(resolve => setTimeout(resolve, 2000)).then(() =>
+          axios
+            .post("https://minderenvoorkinderen.decoco.nl/api/users", {
+              client_id: 1,
+              client_secret: "5C6r0KLA4RIhVFQSOf75GcZzDzJ1pZCOg46gEhKI",
+              email: this.state.email,
+              password: this.state.password,
+            })
+            .then(response => {
+              console.log(response)
+            })
+            .catch(error => {
+              console.log(error.response)
+            })
+        );
+      }}>
         {({ formProps } ) => <form {...formProps} >
           <Field
             name="email"
-            label="Email"
+            label="email"
+            defaultValue=""
             isRequired>
-            {({ fieldProps: { email } }) => <TextField type="email" name="email"
-              label="Email"
-              refs='email' email={email} />}
+            {({ fieldProps }) => <TextField type='email' ref='email' {...fieldProps} />}
           </Field>
           <Field
             name="password"
             label="Password"
             defaultValue=""
             isRequired>
-            {({ fieldProps }) => <TextField type='password' refs='password' {...fieldProps} />}
+            {({ fieldProps }) => <TextField type='password' ref='password' {...fieldProps} />}
           </Field>
           <Button type="submit" appearance="primary">
             Submit
